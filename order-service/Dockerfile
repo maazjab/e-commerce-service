@@ -4,6 +4,6 @@ WORKDIR /app/
 COPY ./package.json ./package-lock.json /app/
 RUN npm install
 
-COPY ./index.js ./Order.js /app/
+COPY ./index.js ./Order.js ./Dockerfile /app/
 
 CMD [ "node", "index" ]
