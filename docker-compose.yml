@@ -3,7 +3,7 @@ services:
   auth-service:
     build: 
       context: .
-      dockerfile: ./auth-service/Dockerfile 
+      dockerfile: ./app/auth-service/Dockerfile 
     ports:
       - "7070:7070"
     volumes:
@@ -25,7 +25,7 @@ services:
   product-service:
     build: 
       context: .
-      dockerfile: ./product-service/Dockerfile 
+      dockerfile: ./app/product-service/Dockerfile 
     ports:
       - "8080:8080"
     volumes:
