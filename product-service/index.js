@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const Product = require("./Product");
+const Product = require("../order-service/Order");
 const amqp = require("amqplib");
 const isAuthenticated = require("./isAuthenticated");
 const Buffer = require("buffer");
@@ -11,7 +11,7 @@ var channel, connection;
 let order;
 app.use(express.json());
 mongoose
-  .connect("mongodb://127.0.0.1:27017/product-service", {
+  .connect("mongodb://192.168.56.9:27017/product-service", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
