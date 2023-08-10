@@ -1,0 +1,45 @@
+version: '2'
+services:
+  auth-service:
+    build: 
+      context: .
+      dockerfile: ./auth-service/Dockerfile 
+    ports:
+      - "7070:7070"
+    volumes:
+      - ./app:/app/auth-service
+    depends_on:
+      - mongodb
+  
+  order-service:
+    build: 
+      context: .
+      dockerfile: ./order-service/Dockerfile
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./app:/app/order-service
+    depends_on:
+      - mongodb
+    
+  product-service:
+    build: 
+      context: .
+      dockerfile: ./product-service/Dockerfile 
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./app:/app/product-service
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo
+    container_name: e-commece-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+
+volumes:
+  mongodb-data:
