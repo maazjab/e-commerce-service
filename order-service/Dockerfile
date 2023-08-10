@@ -1,9 +1,9 @@
 FROM node:14
 
+COPY . /app/
 WORKDIR /app
-COPY ./package.json ./package-lock.json /app/
+
 RUN npm install
-RUN npm install mongoose
 
 COPY ./index.js ./Order.js ./Dockerfile /app/
 
