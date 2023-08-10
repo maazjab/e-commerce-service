@@ -5,7 +5,7 @@ const amqp = require("amqplib");
 const Buffer = require("buffer");
 
 const app = express();
-const PORT = process.env.PORT_TWO || 9090;
+const PORT = process.env.PORT_TWO || 7575;
 var channel, connection;
 let order;
 
