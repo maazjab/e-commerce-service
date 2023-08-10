@@ -16,7 +16,7 @@ services:
       context: ./order-service
       dockerfile: Dockerfile
     ports:
-      - "9090:9090"
+      - "7575:7575"
     volumes:
       - ./order-service:/app
     depends_on:
