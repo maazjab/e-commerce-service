@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const Product = require("../product-service/Product");
+const Product = require("./Product");
 const amqp = require("amqplib");
 const isAuthenticated = require("./isAuthenticated");
 const Buffer = require("buffer");
