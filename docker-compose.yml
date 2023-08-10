@@ -5,7 +5,7 @@ services:
       context: ./auth-service
       dockerfile: Dockerfile 
     ports:
-      - "9090:9090"
+      - "7070:7070"
     volumes:
       - ./auth-service:/app
     depends_on:
@@ -16,7 +16,7 @@ services:
       context: ./order-service
       dockerfile: Dockerfile
     ports:
-      - "7575:7575"
+      - "9090:9090"
     volumes:
       - ./order-service:/app
     depends_on:
