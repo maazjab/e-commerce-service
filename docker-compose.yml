@@ -2,34 +2,34 @@ version: '2'
 services:
   auth-service:
     build: 
-      context: .
-      dockerfile: ./app/auth-service/Dockerfile 
+      context: ./auth-service
+      dockerfile: Dockerfile 
     ports:
       - "7070:7070"
     volumes:
-      - ./app:/app/auth-service
+      - ./app:auth-service
     depends_on:
       - mongodb
   
   order-service:
     build: 
-      context: .
-      dockerfile: ./order-service/Dockerfile
+      context: ./order-service
+      dockerfile: Dockerfile
     ports:
       - "9090:9090"
     volumes:
-      - ./app:/app/order-service
+      - ./app:order-service
     depends_on:
       - mongodb
     
   product-service:
     build: 
-      context: .
-      dockerfile: ./app/product-service/Dockerfile 
+      context: ./product-service
+      dockerfile: Dockerfile 
     ports:
       - "8080:8080"
     volumes:
-      - ./app:/app/product-service
+      - ./app:product-service
     depends_on:
       - mongodb
 
