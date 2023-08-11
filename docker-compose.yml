@@ -35,6 +35,7 @@ services:
       - ./product-service:/product-service/app
     depends_on:
       - mongodb
+      - rabbitmq
 
   mongodb:
     image: mongo
@@ -44,5 +45,16 @@ services:
     volumes:
       - mongodb-data:/data/db
 
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: rabbitmq-container
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq-data:/data/rabbitmq
+    
+
 volumes:
   mongodb-data:
+  rabbitmq:
