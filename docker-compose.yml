@@ -13,7 +13,7 @@ services:
   
   order-service:
     build: 
-      context: ./order-services
+      context: ./order-service
       dockerfile: Dockerfile
     ports:
       - "9090:9090"
