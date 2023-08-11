@@ -8,7 +8,7 @@ services:
     ports:
       - "7070:7070"
     volumes:
-      - ./auth-service:/app
+      - ./auth-service:/auth-service/app
     depends_on:
       - mongodb
   
@@ -20,7 +20,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./order-service:/app
+      - ./order-service:/order-service/app
     depends_on:
       - mongodb
     
@@ -32,7 +32,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./product-service:/app
+      - ./product-service:/product-service/app
     depends_on:
       - mongodb
 
