@@ -1,49 +1,53 @@
 version: '2'
+
 services:
   auth-service:
     build: 
       context: ./auth-service
       dockerfile: Dockerfile 
-    container_name: auth-service
+    container_name: auth-service-container
     ports:
       - "7070:7070"
     volumes:
       - ./auth-service:/auth-service/app
     depends_on:
-      - mongodb
+      - mongodb-service
     networks:
       - e-commerce-service-network
   
-  # order-service:
-  #   build: 
-  #     context: ./order-service
-  #     dockerfile: Dockerfile
-  #   container_name: order-service
-  #   ports:
-  #     - "9090:9090"
-  #   volumes:
-  #     - ./order-service:/order-service/app
-  #   depends_on:
-  #     - mongodb
+  order-service:
+    build: 
+      context: ./order-service
+      dockerfile: Dockerfile
+    container_name: order-service-container
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./order-service:/order-service/app
+    depends_on:
+      - mongodb-service
+      - rabbitmq-service
+    networks:
+      - e-commerce-service-network
     
   product-service:
     build: 
       context: ./product-service
       dockerfile: Dockerfile 
-    container_name: product-service
+    container_name: product-service-container
     ports:
       - "8080:8080"
     volumes:
       - ./product-service:/product-service/app
     depends_on:
-      - mongodb
-      - rabbitmq
+      - mongodb-service
+      - rabbitmq-service
     networks:
       - e-commerce-service-network
 
-  mongodb:
+  mongodb-service:
     image: mongo
-    container_name: e-commece-mongodb
+    container_name: e-commerce-mongodb-container
     ports:
       - "27017:27017"
     volumes:
@@ -51,16 +55,16 @@ services:
     networks:
       - e-commerce-service-network
 
-  rabbitmq:
+  rabbitmq-service:
     image: rabbitmq:3.12-management
-    container_name: rabbitmq-container
+    container_name: e-commerce-rabbitmq-container
     ports:
       - "5672:5672"
       - "15672:15672"
     volumes:
       - rabbitmq-data:/data/rabbitmq
     networks:
-      - e-commerce-service-networks
+      - e-commerce-service-network
 
 networks:
   e-commerce-service-network:
