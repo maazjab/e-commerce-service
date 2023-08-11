@@ -1,9 +1,9 @@
 FROM node:14
 
 WORKDIR /app
-COPY ./package.json ./package-lock.json /app/
+COPY . /app/
 RUN npm install
 
-COPY ./index.js ./User.js ./Dockerfile /app/
+COPY . /app/
 
 CMD [ "node", "index" ]
