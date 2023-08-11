@@ -12,17 +12,17 @@ services:
     depends_on:
       - mongodb
   
-  order-service:
-    build: 
-      context: ./order-service
-      dockerfile: Dockerfile
-    container_name: order-service
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./order-service:/order-service/app
-    depends_on:
-      - mongodb
+  # order-service:
+  #   build: 
+  #     context: ./order-service
+  #     dockerfile: Dockerfile
+  #   container_name: order-service
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - ./order-service:/order-service/app
+  #   depends_on:
+  #     - mongodb
     
   product-service:
     build: 
