@@ -7,8 +7,8 @@ const Buffer = require("buffer");
 
 const app = express();
 const PORT = process.env.PORT_TWO || 8080;
-var channel, connection;
-let order;
+let connection, channel;
+
 app.use(express.json());
 mongoose
   .connect("mongodb://192.168.56.9:27017/product-service", {
@@ -24,8 +24,8 @@ async function connect() {
   channel = await connection.createChannel();
   await channel.assertQueue("PRODUCT");
 }
-connect();
 
+connect();
 //Create new product
 //Buy a product
 app.post("/product/create", isAuthenticated, async (req, res) => {
@@ -46,27 +46,32 @@ app.post("/product/create", isAuthenticated, async (req, res) => {
 // Creating an order with those products and total value of sum of product's prices
 app.post("/product/buy", isAuthenticated, async (req, res) => {
   const { ids } = req.body;
+  let order;
+  try {
+    const products = await Product.find({ _id: { $in: ids } });
 
-  const products = await Product.find({ _id: { $in: ids } });
+    channel.sendToQueue(
+      "ORDER",
+      Buffer.Buffer.from(
+        JSON.stringify({
+          products,
+          userEmail: req.user.email,
+        })
+      )
+    );
 
-  channel.sendToQueue(
-    "ORDER",
-    Buffer.Buffer.from(
-      JSON.stringify({
-        products,
-        userEmail: req.user.email,
-      })
-    )
-  );
+    channel.consume("PRODUCT", (data) => {
+      console.log("Consuming PRODUCT queue");
+      order = JSON.parse(data.content);
+      channel.ack(data);
+    });
 
-  channel.consume("PRODUCT", (data) => {
-    console.log("Consuming PRODUCT queue");
-    order = JSON.parse(data.content);
-    channel.ack(data);
-  });
-
-  return res.json(order);
+    return res.json(order);
+  } catch (error) {
+    console.error(error);
+  }
 });
+
 app.listen(PORT, () => {
   console.log(`Product-service at ${PORT}`);
 });

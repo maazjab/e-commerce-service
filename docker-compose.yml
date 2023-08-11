@@ -59,12 +59,15 @@ services:
     image: rabbitmq:3.12-management
     container_name: e-commerce-rabbitmq-container
     ports:
-      - "5672:5672"
       - "15672:15672"
+      - "5672:5672"
     volumes:
       - rabbitmq-data:/data/rabbitmq
     networks:
       - e-commerce-service-network
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
 
 networks:
   e-commerce-service-network:

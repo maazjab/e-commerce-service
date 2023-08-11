@@ -2,12 +2,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const Order = require("./Order");
 const amqp = require("amqplib");
-const Buffer = require("buffer");
 
 const app = express();
 const PORT = process.env.PORT_TWO || 9090;
-var channel, connection;
-let order;
+let connection, channel;
 
 app.use(express.json());
 mongoose
@@ -15,9 +13,10 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("Order-service DB started"));
+  .then(() => console.log("Order-service DB started"))
+  .catch((error) => console.log(error));
 
-async function createOrder(products, userEmail) {
+function createOrder(products, userEmail) {
   let total = 0;
 
   products.forEach((product) => {
@@ -30,28 +29,30 @@ async function createOrder(products, userEmail) {
     total_price: total,
   });
 
-  await newOrder.save();
+  newOrder.save();
   return newOrder;
 }
+
 async function connect() {
-  const amqpServer = "amqp://192.168.56.9:5672";
-  connection = await amqp.connect(amqpServer);
+  try {
+    const amqpServer = "amqp://192.168.56.9:5672";
+    connection = await amqp.connect(amqpServer);
 
-  channel = await connection.createChannel();
-  await channel.assertQueue("ORDER");
+    channel = await connection.createChannel();
+    await channel.assertQueue("ORDER");
+
+    channel.consume("ORDER", (data) => {
+      const { products, userEmail } = JSON.parse(data.content);
+      let order = createOrder(products, userEmail);
+      channel.ack(data);
+
+      channel.assertQueue("PRODUCT", Buffer.from(JSON.stringify({ order })));
+    });
+  } catch (error) {
+    console.error("Error consuming PRODUCT", error);
+  }
 }
-connect().then(() => {
-  channel.consume("PRODUCT", (data) => {
-    const { products, userEmail } = JSON.parse(data.content);
-    order = createOrder(products, userEmail);
-    channel.ack(data);
-    channel.assertQueue(
-      "PRODUCT",
-      Buffer.Buffer.from(JSON.stringify({ order }))
-    );
-  });
-});
-
+connect();
 app.listen(PORT, () => {
   console.log(`Order-service at ${PORT}`);
 });
