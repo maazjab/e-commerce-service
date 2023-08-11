@@ -4,6 +4,7 @@ services:
     build: 
       context: ./auth-service
       dockerfile: Dockerfile 
+    container_name: auth-service
     ports:
       - "7070:7070"
     volumes:
@@ -15,6 +16,7 @@ services:
     build: 
       context: ./order-service
       dockerfile: Dockerfile
+    container_name: order-service
     ports:
       - "9090:9090"
     volumes:
@@ -26,6 +28,7 @@ services:
     build: 
       context: ./product-service
       dockerfile: Dockerfile 
+    container_name: product-service
     ports:
       - "8080:8080"
     volumes:
