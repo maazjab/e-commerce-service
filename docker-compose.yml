@@ -11,6 +11,8 @@ services:
       - ./auth-service:/auth-service/app
     depends_on:
       - mongodb
+    networks:
+      - e-commerce-service-network
   
   # order-service:
   #   build: 
@@ -36,6 +38,8 @@ services:
     depends_on:
       - mongodb
       - rabbitmq
+    networks:
+      - e-commerce-service-network
 
   mongodb:
     image: mongo
@@ -44,6 +48,8 @@ services:
       - "27017:27017"
     volumes:
       - mongodb-data:/data/db
+    networks:
+      - e-commerce-service-network
 
   rabbitmq:
     image: rabbitmq:3.12-management
@@ -53,8 +59,12 @@ services:
       - "15672:15672"
     volumes:
       - rabbitmq-data:/data/rabbitmq
-    
+    networks:
+      - e-commerce-service-networks
+
+networks:
+  e-commerce-service-network:
 
 volumes:
   mongodb-data:
-  rabbitmq:
+  rabbitmq-data:
